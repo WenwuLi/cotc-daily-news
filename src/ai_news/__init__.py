@@ -1,0 +1,3 @@
+"""AI news domain package."""
+
+
