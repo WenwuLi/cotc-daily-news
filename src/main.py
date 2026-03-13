@@ -7,6 +7,7 @@ Application entrypoint.
 3. 爬取该日期的每日 AI 资讯
 4. 格式化为文本（《每日最新AI资讯》...）
 5. 通过飞书自定义机器人发送消息
+6. 若设置了 OPENCLAW_MESSAGE_FILE，将同一份内容写入该路径，供宿主机 cron 用 OpenClaw CLI 推到 QQ 小龙虾
 """
 
 from __future__ import annotations
@@ -62,10 +63,23 @@ def main() -> None:
     content = format_news_list(items, target_date)
 
     send_text(webhook_url, content)
+
+    # 可选：写入文件供 OpenClaw 定时推送（方案 A：宿主机 cron 读此文件后调 openclaw message send）
+    message_file = os.environ.get("OPENCLAW_MESSAGE_FILE")
+    if message_file:
+        try:
+            os.makedirs(os.path.dirname(os.path.abspath(message_file)) or ".", exist_ok=True)
+            with open(message_file, "w", encoding="utf-8") as f:
+                f.write(content)
+            logger.info("Content written to OPENCLAW_MESSAGE_FILE: %s", message_file)
+        except OSError as e:
+            logger.warning("Failed to write OPENCLAW_MESSAGE_FILE %s: %s", message_file, e)
+
     logger.info("Daily AI news job finished.")
 
 
 if __name__ == "__main__":
     main()
+
 
 
