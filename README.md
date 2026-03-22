@@ -18,8 +18,8 @@
 cotc-daily-news/
 ├── README.md
 ├── docs/
-│   ├── 01-requirements.md
-│   └── 02-design.md
+│   ├── 01-daily-ai-news.md   # 一期：需求与实现设计
+│   └── 02-推送消息到openclaw-qq-小龙虾.md
 ├── requirements.txt
 ├── .env.example              # 复制为 .env 并填写 FEISHU_WEBHOOK_URL
 ├── Dockerfile
@@ -43,11 +43,11 @@ cotc-daily-news/
 ## 一期：每日 AI 资讯
 
 - **数据来源**：<https://ai-bot.cn/daily-ai-news/>
-- **内容范围**：每天 14:00 定时任务跑时，抓取**前一天**的日期分组下的所有条目，最多 **10 条**。
+- **内容范围**：每天 14:00 定时任务跑时，抓取**前一天**的日期分组下的所有条目，最多 **5 条**。
 - **每条包含**：标题、摘要、日期标签、来源、详情页 URL。
 - **输出**：整理为纯文本后推送至飞书群（不写本地文件）。
 
-详见 [docs/01-requirements.md](docs/01-requirements.md)。
+详见 [docs/01-daily-ai-news.md](docs/01-daily-ai-news.md)。
 
 ---
 
