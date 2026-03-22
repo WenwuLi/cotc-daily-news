@@ -9,6 +9,7 @@
 ### 目标
 
 从 [AI 工具集 - 每日 AI 快讯](https://ai-bot.cn/daily-ai-news/) 抓取「前一天」的快讯，整理成纯文本并推送至飞书群机器人。
+
 ![推送消息到飞书](https://i.mji.rip/2026/03/22/d3ad1e8bdf9e64c24fc75b4241e0a4dd.png)
 
 ### 数据来源

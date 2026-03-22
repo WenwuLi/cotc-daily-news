@@ -18,8 +18,8 @@
 cotc-daily-news/
 ├── README.md
 ├── docs/
-│   ├── 01-daily-ai-news.md   # 一期：需求与实现设计
-│   └── 02-推送消息到openclaw-qq-小龙虾.md
+│   ├── 01-python抓取每日资讯推送飞书机器人.md   # 一期：需求与实现设计
+│   └── 02-推送消息到openclaw-qq-小龙虾.md      # 可选：经 OpenClaw 转发到 QQ
 ├── requirements.txt
 ├── .env.example              # 复制为 .env 并填写 FEISHU_WEBHOOK_URL
 ├── Dockerfile
@@ -47,7 +47,23 @@ cotc-daily-news/
 - **每条包含**：标题、摘要、日期标签、来源、详情页 URL。
 - **输出**：整理为纯文本后推送至飞书群（不写本地文件）。
 
-详见 [docs/01-daily-ai-news.md](docs/01-daily-ai-news.md)。
+**效果（飞书群）：**
+
+![推送消息到飞书](https://i.mji.rip/2026/03/22/d3ad1e8bdf9e64c24fc75b4241e0a4dd.png)
+
+详见 [docs/01-python抓取每日资讯推送飞书机器人.md](docs/01-python抓取每日资讯推送飞书机器人.md)。
+
+---
+
+## 扩展：经 OpenClaw 推送到 QQ（小龙虾）
+
+在飞书推送之外，可将同一套资讯经 [OpenClaw](https://github.com/openclaw/openclaw) 与「小龙虾」通道转发到 QQ（宿主机 cron + 文件方案等）。步骤与踩坑见文档。
+
+**效果（QQ）：**
+
+![QQ 小龙虾推送每日 AI 资讯](https://i.mji.rip/2026/03/22/6b8a41861924bfd4a027ac1ebca25908.png)
+
+详见 [docs/02-推送消息到openclaw-qq-小龙虾.md](docs/02-推送消息到openclaw-qq-小龙虾.md)。
 
 ---
 
