@@ -3,22 +3,21 @@ Application entrypoint.
 
 定时任务每天 14:00 启动 Docker 容器后，将执行本模块的 main()：
 1. 读取环境变量 FEISHU_WEBHOOK_URL
-2. 计算前一天日期
-3. 爬取该日期的每日 AI 资讯
-4. 格式化为文本（《每日最新AI资讯》...）
-5. 通过飞书自定义机器人发送消息
-6. 若设置了 OPENCLAW_MESSAGE_FILE，将同一份内容写入该路径，供宿主机 cron 用 OpenClaw CLI 推到 QQ 小龙虾
+2. 爬取列表页「最新一期」AI 资讯（与「昨日」是否已更新无关）
+3. 格式化为文本（《每日最新AI资讯》...）
+4. 通过飞书自定义机器人发送消息
+5. 若设置了 OPENCLAW_MESSAGE_FILE，将同一份内容写入该路径，供宿主机 cron 用 OpenClaw CLI 推到 QQ 小龙虾
 """
 
 from __future__ import annotations
 
 import logging
 import os
-from datetime import date, datetime, timedelta
+from datetime import datetime
 
 from dotenv import load_dotenv
 
-from .ai_news.crawler import AiNewsItem, fetch_daily_news
+from .ai_news.crawler import AiNewsItem, fetch_latest_daily_news
 from .ai_news.formatter import format_news_list
 from .common.feishu import send_text
 
@@ -29,17 +28,6 @@ def configure_logging() -> None:
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
     )
-
-
-def get_target_date(today: date | None = None) -> date:
-    """
-    根据当前日期计算目标日期（前一天）。
-
-    :param today: 可选的“今天”日期，主要方便将来做单元测试；不传则使用系统当前日期。
-    """
-    if today is None:
-        today = datetime.now().date()
-    return today - timedelta(days=1)
 
 
 def main() -> None:
@@ -56,11 +44,11 @@ def main() -> None:
         logger.error("Environment variable FEISHU_WEBHOOK_URL is not set. Abort.")
         return
 
-    target_date = get_target_date()
-    logger.info("Starting daily AI news job for date: %s", target_date.isoformat())
+    run_date = datetime.now().date()
+    logger.info("Starting daily AI news job (latest issue), run_date=%s", run_date.isoformat())
 
-    items: list[AiNewsItem] = fetch_daily_news(target_date)
-    content = format_news_list(items, target_date)
+    items: list[AiNewsItem] = fetch_latest_daily_news()
+    content = format_news_list(items, reference_date=run_date)
 
     send_text(webhook_url, content)
 
