@@ -70,6 +70,7 @@ def _fetch_soup() -> BeautifulSoup | None:
     try:
         resp = requests.get(BASE_URL, headers=_request_headers(), timeout=10)
         resp.raise_for_status()
+        resp.encoding = resp.apparent_encoding or "utf-8"
     except requests.RequestException as exc:
         logger.error("Failed to fetch ai-bot daily page: %s", exc)
         return None
